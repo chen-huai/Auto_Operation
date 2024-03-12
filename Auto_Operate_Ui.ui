@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>712</height>
+    <width>512</width>
+    <height>719</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -75,7 +75,7 @@
               <string>获取数据</string>
              </property>
              <property name="text">
-              <string>获取步骤流程</string>
+              <string>获取步骤</string>
              </property>
             </widget>
            </item>
@@ -130,7 +130,38 @@
            <string>操作</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_18">
-           <item row="1" column="2">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>暂停时间</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QPushButton" name="pushButton_56">
+             <property name="text">
+              <string>获取坐标位置</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QSpinBox" name="spinBox">
+             <property name="value">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="checkBox">
+             <property name="text">
+              <string>每次</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
             <widget class="QPushButton" name="pushButton_12">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -146,24 +177,39 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="4">
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>循环次数</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="spinBox_2">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="value">
+              <number>30</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4" rowspan="2">
             <widget class="QPushButton" name="pushButton_57">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>开始</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="QPushButton" name="pushButton_56">
-             <property name="text">
-              <string>获取坐标位置</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="checkBox">
-             <property name="text">
-              <string>每次</string>
              </property>
             </widget>
            </item>
@@ -181,7 +227,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>501</width>
+     <width>512</width>
      <height>25</height>
     </rect>
    </property>
@@ -192,12 +238,11 @@
      </font>
     </property>
     <property name="title">
-     <string>File</string>
+     <string>文件</string>
     </property>
     <addaction name="actionExport"/>
     <addaction name="actionImport"/>
     <addaction name="separator"/>
-    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="font">
@@ -206,7 +251,7 @@
      </font>
     </property>
     <property name="title">
-     <string>Help</string>
+     <string>帮助</string>
     </property>
     <addaction name="actionHelp"/>
     <addaction name="actionAuthor"/>
