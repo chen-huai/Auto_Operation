@@ -211,7 +211,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     # 电脑桌面操作
     def win_auto_step(self):
         steps_list_data = myWin.getStepListData()
-        steps_num = list(steps_list_data['序号'])
+        # steps_num = list(steps_list_data['序号'])
         steps = list(steps_list_data['步骤'])
         win_auto_obj = Windows_auto()
         cycles_num = int(self.spinBox_2.text())

@@ -30,12 +30,15 @@ class Windows_auto():
                 pyautogui.press(step[1])
             elif step[0].lower() == 'hotkey':
                 i = 0
-                buttons = ''
+                buttons = []
                 for button in step:
                     if i != 0:
-                        buttons += button
+                        buttons.append(button)
+
                     i += 1
-                pyautogui.hotkey(step[1], step[2])
+                key_string = ', '.join([f"'{key}'" for key in buttons])
+                a = pyautogui.hotkey(key_string)
+                print(a)
             else:
                 time.sleep(3)
         except:
