@@ -1,36 +1,72 @@
-import pyautogui
+import pandas as pd
+from pandas.tseries.offsets import BDay
+from datetime import datetime, timedelta
 
-width, height = pyautogui.size()
-print(width, height)
+# 读取人员数据
+file_name = "人员.xlsx"
+sheet_name = "Sheet1"
+df = pd.read_excel(file_name, sheet_name=sheet_name)
 
-# pyautogui.moveTo(0, 0, duration=0.0025)
+# 初始化日历和假期信息
+start_date = datetime(2025, 4, 1)
+end_date = datetime(2025, 12, 31)
+holidays = [
+    datetime(2025, 1, 1),
+    *pd.date_range(start='2025-01-29', end='2025-02-04'),
+    *pd.date_range(start='2025-04-04', end='2025-04-06'),
+    *pd.date_range(start='2025-05-01', end='2025-05-03'),
+    *pd.date_range(start='2025-06-07', end='2025-06-09'),
+    *pd.date_range(start='2025-10-01', end='2025-10-07')
+]
 
-# pyautogui.click
-# pyautogui.FAILSAFE
+# 生成工作日期
+work_dates = pd.date_range(start=start_date, end=end_date, freq='B')
 
-# pyautogui.moveTo(1919, 1079, duration=0.0025)
-img = pyautogui.screenshot()
-# 获取当前坐标
-x, y = pyautogui.position()
-pyautogui.moveTo(1200, 890, duration=0.25)
-pyautogui.moveTo(1300, 122, duration=0.25)
+# 初始化任务安排表
+schedule_rows = []
 
+# 按小组分配成员
+groups = df.groupby("小组").agg(list).to_dict()["人员名称"]
 
+# 分配任务
+daily_task_count = {name: 0 for name in df["人员名称"]}
+supplement_task_count = {name: 0 for name in df["人员名称"]}
 
-from pywinauto import application
+def assign_members(exclude_list, count, task_count):
+    candidates = [name for name in df["人员名称"] if name not in exclude_list]
+    candidates.sort(key=lambda x: task_count[x])
+    return candidates[:count]
 
-# 启动应用程序
-app = application.Application().start("C:\\Program Files\\Notepad3\\Notepad3.exe")
+# 检查日期是否是节假日或周末后的工作日
+def is_after_holiday_or_weekend(date, holidays):
+    if date.weekday() == 0:  # Monday
+        return (date - timedelta(days=2)) not in work_dates or (date - timedelta(days=1)) in holidays
+    return (date - timedelta(days=1)) in holidays
 
-# 选择窗口
-window = app.UntitledNotepad
+for date in work_dates:
+    daily_members = assign_members([], 5, daily_task_count)
+    for member in daily_members:
+        daily_task_count[member] += 1
 
-# 获取窗口中的所有子控件
-children = window.children()
+    supplement_members = []
+    if is_after_holiday_or_weekend(date, holidays):
+        supplement_members = assign_members(daily_members, 2, supplement_task_count)
+        for member in supplement_members:
+            supplement_task_count[member] += 1
 
-# 输出所有子控件的类名和标题
-for child in children:
-    print(child.class_name(), child.window_text(),1)
-    buttons = child.children()
-    for button in buttons:
-        print(button,2)
+    schedule_rows.append({
+        "日期": date,
+        "日常组成员": ", ".join(daily_members),
+        "增补组成员": ", ".join(supplement_members)
+    })
+
+# 更新人员表的次数
+df["日常次数"] = df["人员名称"].map(daily_task_count)
+df["增补次数"] = df["人员名称"].map(supplement_task_count)
+
+# 导出任务安排表
+schedule = pd.DataFrame(schedule_rows)
+schedule.to_excel("排班表.xlsx", index=False)
+
+# 导出更新后的人员表
+df.to_excel("更新后的人员.xlsx", index=False)
